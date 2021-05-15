@@ -1,0 +1,99 @@
+﻿<Window x:Class="Biblioteka_muzyczna.AlbumList"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Biblioteka_muzyczna"
+        mc:Ignorable="d"
+        Title="Lista albumów" Height="500" Width="750" ResizeMode="CanMinimize" WindowStartupLocation="CenterOwner" Background="#FFC5C5C5" Icon="/Biblioteka muzyczna;component/Data/music-note.ico">
+    <Window.Resources>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style x:Key="ButtonRoundedStyle" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" CornerRadius="10" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="#808080"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#000000"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="#4d4d4d"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#000000"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="22*"/>
+                <ColumnDefinition Width="16*"/>
+                <ColumnDefinition Width="17*"/>
+                <ColumnDefinition Width="22*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="11*"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="sortByTextBlock" Margin="10" TextWrapping="Wrap" Text="Sortuj według: " FontSize="22" TextAlignment="Center" FontFamily="Trebuchet MS" FontWeight="Bold"/>
+            <ComboBox x:Name="sortByComboBox" Grid.Column="1" Margin="10" Grid.ColumnSpan="3" FontSize="18" SelectionChanged="SortByComboBox_SelectionChanged" FontFamily="Trebuchet MS">
+                <ListBoxItem Content="ID" FontSize="18"/>
+                <ListBoxItem Content="Tytuł"/>
+                <ListBoxItem Content="Wykonawca"/>
+                <ListBoxItem Content="Rok"/>
+            </ComboBox>
+            <DataGrid x:Name="albumListDataGrid" ItemsSource="{Binding Items}" Margin="10" Grid.Row="1" Grid.ColumnSpan="4" MouseDoubleClick="AlbumListDataGrid_MouseDoubleClick" IsReadOnly="True" CanUserSortColumns="False" CanUserResizeRows="False" CanUserResizeColumns="False" CanUserReorderColumns="False" FontFamily="Trebuchet MS" FontSize="16" AutoGenerateColumns="False" SelectionChanged="AlbumListDataGrid_SelectionChanged" HorizontalScrollBarVisibility="Disabled">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="30"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Rok" Binding="{Binding Year}" Width="50"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Tytuł" Binding="{Binding Title}" Width="340"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Wykonawca" Binding="{Binding Artist}" Width="265"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Button x:Name="backButton" Content="Wróć" Margin="10" Grid.Row="2" Grid.Column="2" Click="BackButton_Click" FontFamily="Trebuchet MS" FontWeight="Bold" FontSize="18" BorderThickness="3" Style="{DynamicResource ButtonRoundedStyle}" Background="#FF9C9C9C"/>
+            <Button x:Name="selectButton" Content="Wybierz" Grid.Column="3" Margin="10" Grid.Row="2" Click="SelectButton_Click" FontFamily="Trebuchet MS" FontWeight="Bold" FontSize="18" BorderThickness="3" Style="{DynamicResource ButtonRoundedStyle}" Background="#FF9C9C9C"/>
+        </Grid>
+
+    </Grid>
+</Window>
