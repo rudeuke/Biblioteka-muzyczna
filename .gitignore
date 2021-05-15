@@ -348,6 +348,3 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-
-# Keeping the SQLite.Interop.dll files from Debug folder solves compilation error
-!SQLite.Interop.dll
